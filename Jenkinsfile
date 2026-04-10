@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = 'karteek0077/eureka-service'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -15,9 +19,11 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Docker Build') {
             steps {
-                sh 'mvn test'
+                script {
+                    docker.build("${DOCKER_IMAGE}:${BUILD_NUMBER}")
+                }
             }
         }
     }
@@ -25,9 +31,6 @@ pipeline {
     post {
         always {
             cleanWs()
-        }
-        success {
-            echo 'Eureka Service built successfully!'
         }
     }
 }
