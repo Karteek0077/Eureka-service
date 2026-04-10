@@ -13,6 +13,7 @@ pipeline {
             }
         }
 
+
         stage('Build') {
             steps {
                 sh 'mvn clean package -DskipTests'
@@ -20,12 +21,10 @@ pipeline {
         }
 
         stage('Docker Build') {
-            steps {
-                script {
-                    docker.build("${DOCKER_IMAGE}:${BUILD_NUMBER}")
-                }
-            }
-        }
+    steps {
+        sh 'docker build -t karteek0077/eureka-service:${BUILD_NUMBER} .'
+    }
+}
     }
 
     post {
